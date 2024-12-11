@@ -2,7 +2,7 @@ const express = require('express');
 const WebSocket = require('ws');
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 // Servir archivos estáticos (como el HTML y el JavaScript) desde la carpeta 'public'
 app.use(express.static('public'));
