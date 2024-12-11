@@ -40,12 +40,27 @@
       console.log('Conexión WebSocket establecida');
     };
 
-    ws.onmessage = (event) => {
+    /*ws.onmessage = (event) => {
       const message = JSON.parse(event.data);
       const li = document.createElement('li');
       li.textContent = message.message;
       messages.appendChild(li);
-    };
+    };*/
+    ws.on('message', (message) => {
+  // Convertir el mensaje recibido (Buffer) en un string y luego parsearlo a un objeto JSON
+  const parsedMessage = JSON.parse(message.toString());
+
+  console.log('Mensaje recibido:', parsedMessage);
+
+  // Enviar el mensaje recibido a todos los clientes conectados
+  wss.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify(parsedMessage));
+    }
+  });
+});
+
+
 
     // Enviar el mensaje al servidor cuando el usuario presiona "Enter"
     input.addEventListener('keypress', (e) => {
