@@ -1,4 +1,3 @@
-<!-- public/index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -40,27 +39,17 @@
       console.log('Conexión WebSocket establecida');
     };
 
-    /*ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
+    // Manejar mensaje recibido del servidor
+    ws.onmessage = (event) => {
+      // Convertir el mensaje recibido (Buffer) en un string y luego parsearlo a un objeto JSON
+      const parsedMessage = JSON.parse(event.data);
+      console.log('Mensaje recibido:', parsedMessage);
+
+      // Agregar el mensaje a la lista
       const li = document.createElement('li');
-      li.textContent = message.message;
+      li.textContent = parsedMessage.message;
       messages.appendChild(li);
-    };*/
-    ws.on('message', (message) => {
-  // Convertir el mensaje recibido (Buffer) en un string y luego parsearlo a un objeto JSON
-  const parsedMessage = JSON.parse(message.toString());
-
-  console.log('Mensaje recibido:', parsedMessage);
-
-  // Enviar el mensaje recibido a todos los clientes conectados
-  wss.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify(parsedMessage));
-    }
-  });
-});
-
-
+    };
 
     // Enviar el mensaje al servidor cuando el usuario presiona "Enter"
     input.addEventListener('keypress', (e) => {
@@ -73,3 +62,4 @@
   </script>
 </body>
 </html>
+
