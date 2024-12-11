@@ -1,0 +1,60 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat en Tiempo Real con WebSockets</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #messages {
+      list-style-type: none;
+      padding: 0;
+    }
+    #messages li {
+      padding: 8px;
+      border-bottom: 1px solid #ccc;
+    }
+    #input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Chat en Tiempo Real</h1>
+  <ul id="messages"></ul>
+  <input type="text" id="input" placeholder="Escribe un mensaje..." />
+  
+  <script>
+    const ws = new WebSocket('ws://localhost:3000');
+    const messages = document.getElementById('messages');
+    const input = document.getElementById('input');
+
+    // Conectar al WebSocket y manejar mensajes
+    ws.onopen = () => {
+      console.log('Conexión WebSocket establecida');
+    };
+
+    ws.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      const li = document.createElement('li');
+      li.textContent = message.message;
+      messages.appendChild(li);
+    };
+
+    // Enviar el mensaje al servidor cuando el usuario presiona "Enter"
+    input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        const message = input.value;
+        ws.send(JSON.stringify({ message }));
+        input.value = ''; // Limpiar el campo de entrada
+      }
+    });
+  </script>
+</body>
+</html>
