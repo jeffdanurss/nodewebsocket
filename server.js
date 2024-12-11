@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const WebSocket = require('ws');
 
@@ -25,6 +24,7 @@ wss.on('connection', (ws) => {
   // Escuchar mensajes del cliente
   ws.on('message', (message) => {
     console.log('Mensaje recibido:', message);
+
     // Enviar el mensaje recibido a todos los clientes conectados
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
@@ -38,3 +38,4 @@ wss.on('connection', (ws) => {
     console.log('Cliente desconectado');
   });
 });
+
